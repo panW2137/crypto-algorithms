@@ -49,26 +49,36 @@ int a_is_invalid(){
 
 
 
-//extended euclidian algorithm
-int modinv(int a, int n) {
-    //najpierw znajdz NWD (NWD jest 1)
-    //znajdz taka liczbe x, ze a*x = N-NWD
-    //potem 
-
-    int t = 0, newt = 1;
-    int r = n, newr = a;
-    while (newr != 0) {
-        int quotient = r / newr;
-        int temp = t;
-        t = newt;
-        newt = temp - quotient * newt;
-        temp = r;
-        r = newr;
-        newr = temp - quotient * newr;
+int gcdExtended(int a, int b, int* x, int* y)
+{
+    if (a == 0) {
+        *x = 0, *y = 1;
+        return b;
     }
-    if (r > 1) return -1;
-    if (t < 0) t += n;
-    return t;
+
+    int x1, y1;
+    int gcd = gcdExtended(b % a, a, &x1, &y1);
+
+    *x = y1 - (b / a) * x1;
+    *y = x1;
+
+    return gcd;
+}
+
+
+
+int modinv(int A, int M)
+{
+    int x, y;
+    int g = gcdExtended(A, M, &x, &y);
+    if(g != 1){
+        modinverror = 1;
+        return 1;
+    }
+    else{
+        int res = (x % M + M) % M;
+        return res;
+    }
 }
 
 
@@ -130,7 +140,7 @@ void process_file(){
 int main(int argc, char** argv){
     if(argc != 6){
         SYNERROR:
-        printf("synopsis:\nlinear [e/d] [A] [B] [INPUT PATH] [OUTPUT PATH]\n");
+        printf("synopsis:\n%s [e/d] [A] [B] [INPUT PATH] [OUTPUT PATH]\n",argv[0]);
         return 1;
     }
     mode = argv[1][0];
@@ -171,6 +181,10 @@ int main(int argc, char** argv){
 
     if(charerror){
         printf("illegal character spotted. Output may not be correct\n");
+        return 1;
+    }
+    if(modinverror){
+        printf("an error occured when trying to calculate modular inverse. This is hopeless and you should give up\n");
         return 1;
     }
 

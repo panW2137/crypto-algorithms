@@ -81,7 +81,7 @@ void process_file(){
 int main(int argc, char** argv){
     if(argc != 5){
         SYNERROR:
-        printf("synopsis:\nviegenere [e/d] [KEY] [INPUT PATH] [OUTPUT PATH]\n");
+        printf("synopsis:\n%s [e/d] [KEY] [INPUT PATH] [OUTPUT PATH]\n",argv[0]);
         return 1;
     }
     mode = argv[1][0];

@@ -13,12 +13,12 @@ ENCRYPTED_PATH = "encrypted.txt"
 DECRYPTED_PATH = "decrypted.txt"
 
 # --- WIADOMOŚĆ TESTOWA ---
-TEST_MESSAGE = """Towarzysze!
-Szyfr liniowy służy narodowi i budowie socjalizmu.
+TEST_MESSAGE = """Towarzysze
+Szyfr liniowy sluzy narodowi i budowie socjalizmu.
 1234567890
 abc ABC
 ., 
-Niech matematyka i jedność ludu prowadzą nas do wspólnego dobrobytu!
+Niech matematyka i jednosc ludu prowadza nas do wspolnego dobrobytu
 """
 
 # --- CYTATY PRZEWODNICZĄCEGO XI ---
