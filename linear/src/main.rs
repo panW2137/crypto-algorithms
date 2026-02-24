@@ -1,8 +1,8 @@
 //todo
-//get arguments
-//validate arguments
-//  all requied arguments given
-//  keys must be coprime
+//get arguments +
+//validate arguments +
+//  all requied arguments given +
+//  keys must be coprime +
 //  input exist
 //get input text
 //encrypt/decrypt input text
@@ -13,6 +13,10 @@ use std::env;
 use std::path::Path;
 use std::fs;
 
+pub static ALPHABET: [char; 26] = [
+    'a','b','c','d','e','f','g','h','i','j','k','l','m',
+    'n','o','p','q','r','s','t','u','v','w','x','y','z'
+];
 struct Options {
     a:i32,
     b:i32,
@@ -21,6 +25,27 @@ struct Options {
     input_text:String,
     output_text:String,
     encrypt: bool,
+}
+
+//wtf
+//this language is strange
+pub fn get_char(index: i32) -> Option<char> {
+    if (0..26).contains(&index) {
+        return ALPHABET.get(index as usize).copied();
+    } else {
+        return None;
+    }
+}
+
+pub fn index_of(c: char) -> Option<usize> {
+    let mut i = 0;
+    while i < 26 {
+        if c == ALPHABET[i] {
+            return Some(i);
+        }
+        i += 1;
+    }
+    None
 }
 
 /*
@@ -36,7 +61,7 @@ fn get_argument<'res>(args: &'res [String] ,name: &str) -> Result<&'res String, 
         }
         i += 1;
     };
-    return Err(format!("argument \"{}\" not found",&name).to_string());
+    return Err(format!("argument '{}' not found",&name).to_string());
 }
 
 //function checks if argument with that name exist
@@ -47,6 +72,24 @@ fn has_argument(args: &[String], name:&str) -> bool {
     return false;
 }
 
+fn gcd(a: i32, b: i32) -> i32 {
+    let mut x = a;
+    let mut y = b;
+
+    while y != 0 {
+        let r = x % y;
+        x = y;
+        y = r;
+    }
+
+    x
+}
+
+/*
+    function takes an input from the console, validates it
+    and writes it to the struct or throws an error
+*/
+
 fn get_input(args: &[String], opt: &mut Options) -> Result<(), String>{
     // validating A and B
     let a_str = get_argument(&args, "-a")?.clone();
@@ -56,13 +99,17 @@ fn get_input(args: &[String], opt: &mut Options) -> Result<(), String>{
     opt.a = a_str.parse::<i32>().map_err(|_| format!("incorrect value A: {}, expected whole number",a_str))?;
     opt.b = b_str.parse::<i32>().map_err(|_| format!("incorrect value B: {}, expected whole number",a_str))?;
 
+    if gcd(opt.a, opt.b) != 1 {
+        return Err("arguments A and B are not coprime".to_string());
+    }
+
     //validating paths
     let input_path = get_argument(&args, "--input")?;
     let output_path = get_argument(&args, "--output")?;
 
     let p=Path::new(&input_path);
     if !p.exists() {
-        return Err(format!("file {} does not exist",input_path));
+        return Err(format!("file '{}' does not exist",input_path));
     }
     opt.input_path = input_path.clone();
     opt.output_path = output_path.clone();
