@@ -3,13 +3,13 @@
 //validate arguments +
 //  all requied arguments given +
 //  keys must be coprime +
-//  input exist
-//get input text
+//  input exist +
+//get input text +
 //encrypt/decrypt input text
 //  since this cipher only operates on alphabet letters
 //  non-alphabet characters will be ignored
 //write the output text
-use std::env;
+use std::{char, env};
 use std::path::Path;
 use std::fs;
 
@@ -128,6 +128,33 @@ fn get_input(args: &[String], opt: &mut Options) -> Result<(), String>{
     }
 
     Ok(())
+}
+
+/*
+    this is the de facto cryptographic function
+    i will use the same one for encryption/decryption
+    just with diffrent keys
+*/
+
+fn modify_char(c:&char, a:&i32, b:&i32) -> Option<char>{
+    //this language is confusing
+    let index = index_of(*c)? as i32;
+
+    let newIndex = index*a + b;
+
+    return get_char(newIndex);
+}
+
+/*
+    this function applies cryptographic function to every char
+    or omits if char not in alphabet
+*/
+
+fn modify_string(input:String, a:i32, b:i32, encrypt:bool) -> String {
+    for c in input.chars() {
+
+    }
+    return  "TwojaStara".to_string();
 }
 
 fn main() -> Result<(),String>{
