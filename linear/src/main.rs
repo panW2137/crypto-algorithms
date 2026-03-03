@@ -130,6 +130,31 @@ fn get_input(args: &[String], opt: &mut Options) -> Result<(), String>{
     Ok(())
 }
 
+
+//mod inv
+fn mod_inv(a: i32, m: i32) -> Result<i32, String> {
+    let (mut t, mut new_t) = (0, 1);
+    let (mut r, mut new_r) = (m, a.rem_euclid(m));
+
+    while new_r != 0 {
+        let quotient = r / new_r;
+
+        let temp_t = t - quotient * new_t;
+        t = new_t;
+        new_t = temp_t;
+
+        let temp_r = r - quotient * new_r;
+        r = new_r;
+        new_r = temp_r;
+    }
+
+    if r != 1 {
+        return Err(format!("{} has no modular inverse modulo {}", a, m));
+    }
+
+    Ok(t.rem_euclid(m))
+}
+
 /*
     this is the de facto cryptographic function
     i will use the same one for encryption/decryption
